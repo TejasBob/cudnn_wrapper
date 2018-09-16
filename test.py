@@ -89,7 +89,7 @@ def main():
     result_arr = np.zeros(img.shape, np.float32)
     drv.memcpy_dtoh(result_arr, new_output)
 
-    # print(np.min(result_arr), np.max(result_arr), len(np.unique(result_arr)))
+    print("max, min : ", np.max(result_arr), np.min(result_arr))
 
 
     result_arr[result_arr<=0] = 0
@@ -97,11 +97,10 @@ def main():
     result_arr /= np.max(result_arr)
 
     result_arr = np.uint8(result_arr * 255)
-    print(result_arr.dtype, result_arr.shape)
 
     cv2.imwrite("result.png", result_arr)
     cudnnDestroy(cudnn_handle)
-    print("done")
+    # print("done")
 
 
 if __name__ == '__main__':

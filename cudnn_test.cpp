@@ -18,8 +18,8 @@ cv::Mat load_image(const char* image_path) {
   cv::Mat image = cv::imread(image_path, CV_LOAD_IMAGE_COLOR);
   image.convertTo(image, CV_32FC3);
   cv::normalize(image, image, 0, 1, cv::NORM_MINMAX);
-  std::cerr << "Input Image: " << image.rows << " x " << image.cols << " x "
-            << image.channels() << std::endl;
+  // std::cerr << "Input Image: " << image.rows << " x " << image.cols << " x "
+  //           << image.channels() << std::endl;
   return image;
 }
 
@@ -37,7 +37,7 @@ void save_image(const char* output_filename,
   cv::normalize(output_image, output_image, 0.0, 255.0, cv::NORM_MINMAX);
   output_image.convertTo(output_image, CV_8UC3);
   cv::imwrite(output_filename, output_image);
-  std::cerr << "Wrote output to " << output_filename << std::endl;
+  // std::cerr << "Wrote output to " << output_filename << std::endl;
 }
 
 int main(int argc, const char* argv[]) {
@@ -47,10 +47,10 @@ int main(int argc, const char* argv[]) {
   }
 
   int gpu_id = (argc > 2) ? std::atoi(argv[2]) : 0;
-  std::cerr << "GPU: " << gpu_id << std::endl;
+  // std::cerr << "GPU: " << gpu_id << std::endl;
 
   bool with_sigmoid = (argc > 3) ? std::atoi(argv[3]) : 0;
-  std::cerr << "With sigmoid: " << std::boolalpha << with_sigmoid << std::endl;
+  // std::cerr << "With sigmoid: " << std::boolalpha << with_sigmoid << std::endl;
 
   cv::Mat image = load_image(argv[1]);
 
@@ -100,8 +100,8 @@ int main(int argc, const char* argv[]) {
                                                    &height,
                                                    &width));
 
-  std::cerr << "Output Image: " << height << " x " << width << " x " << channels
-            << std::endl;
+  // std::cerr << "Output Image: " << height << " x " << width << " x " << channels
+  //           << std::endl;
 
   cudnnTensorDescriptor_t output_descriptor;
   checkCUDNN(cudnnCreateTensorDescriptor(&output_descriptor));
@@ -212,7 +212,7 @@ int main(int argc, const char* argv[]) {
   float max_val = -99999999;
   float min_val = 99999999;
 
-  printf("MAx val %f  %f\n", max_val , min_val);
+  // printf("MAx val %f  %f\n", max_val , min_val);
   for(int ii = 0; ii<image_bytes; ii++)
   {
     if (max_val < h_output[ii])
@@ -222,7 +222,7 @@ int main(int argc, const char* argv[]) {
       min_val = h_output[ii];
   }
 
-  printf("MAx val %f  %f\n", max_val , min_val);
+  printf("max, min : %f  %f\n", max_val , min_val);
   save_image("cudnn-out.png", h_output, height, width);
 
   delete[] h_output;
